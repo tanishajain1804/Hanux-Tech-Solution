@@ -3,64 +3,74 @@ import Navbar from "../components/Navbar/Navbar";
 import { Footer } from "../components/Footer/Footer";
 import "./About.css";
 
-// Team Members Data
-interface TeamMember {
-  n: string;
-  r: string;
-  av: string;
-  bg: string;
+// Leadership Members Data
+interface LeadershipMember {
+  i: number;
+  initials: string;
+  name: string;
+  role: string;
+  shortLine: string;
   bio: string;
   tags: string[];
+  statText: string;
+  gradient: string;
 }
 
-const TEAM: TeamMember[] = [
+const LEADERSHIP: LeadershipMember[] = [
   {
-    n: "Rahul Sharma",
-    r: "Founder & CTO",
-    av: "RS",
-    bg: "linear-gradient(135deg,#1e4fd8,#3b7bf5)",
-    bio: "7 years building enterprise platforms. Led architecture for three unicorn-stage startups. Obsessed with zero-downtime deployments and TypeScript strict mode.",
-    tags: ["React", "NestJS", "AWS", "PostgreSQL", "TypeScript"]
+    i: 0,
+    initials: "PK",
+    name: "Priya Kapoor",
+    role: "Chief Technology Officer",
+    shortLine: "Ex-CRED & Razorpay. Owns the technical roadmap.",
+    bio: "8 years in product engineering. Previously led platform teams at CRED and Razorpay. Owns HanuxTech's entire technical roadmap and architecture review process.",
+    tags: ["System Design", "React", "AWS", "Team Leadership"],
+    statText: "Reviews every architecture decision",
+    gradient: "linear-gradient(135deg,#7c3aed,#a78bfa)"
   },
   {
-    n: "Priya Kapoor",
-    r: "Head of Design",
-    av: "PK",
-    bg: "linear-gradient(135deg,#7c3aed,#a78bfa)",
-    bio: "8 years in product design. Previously at CRED and Razorpay. Believes every interaction should feel inevitable — not designed. Runs our Figma design system.",
-    tags: ["Figma", "Design Systems", "Framer", "User Research"]
+    i: 1,
+    initials: "AM",
+    name: "Arjun Mehta",
+    role: "Chief Operating Officer",
+    shortLine: "10 years in infrastructure. Runs delivery & ops.",
+    bio: "10 years in infrastructure and delivery. Kept 500K sessions online without a single missed alert. Runs sprint operations and client delivery across every active project.",
+    tags: ["Terraform", "AWS ECS", "Delivery Ops", "Kubernetes"],
+    statText: "99.9% uptime across every deploy",
+    gradient: "linear-gradient(135deg,#0ea68c,#34d399)"
   },
   {
-    n: "Arjun Mehta",
-    r: "Lead DevOps Engineer",
-    av: "AM",
-    bg: "linear-gradient(135deg,#0ea68c,#34d399)",
-    bio: "10 years in infrastructure. If you're wondering who kept 500K sessions online without a single alert — it was Arjun. Terraform and ECS are his second language.",
-    tags: ["Terraform", "Docker", "AWS ECS", "Kubernetes", "Redis"]
-  },
-  {
-    n: "Shreya Mishra",
-    r: "Senior Full-Stack Engineer",
-    av: "SM",
-    bg: "linear-gradient(135deg,#f59e0b,#fcd34d)",
+    i: 2,
+    initials: "SM",
+    name: "Shreya Mishra",
+    role: "Senior Full-Stack Engineer",
+    shortLine: "5 years of TypeScript, zero tolerance for untyped APIs.",
     bio: "5 years of TypeScript, zero tolerance for untyped APIs. Shipped the fastest MVP in HanuxTech history — 5.5 weeks from brief to live on AWS.",
-    tags: ["TypeScript", "Next.js", "GraphQL", "NestJS"]
+    tags: ["TypeScript", "Next.js", "GraphQL", "NestJS"],
+    statText: "Shipped fastest MVP (5.5 weeks)",
+    gradient: "linear-gradient(135deg,#f59e0b,#fcd34d)"
   },
   {
-    n: "Vikram Nair",
-    r: "AI & ML Integration Lead",
-    av: "VN",
-    bg: "linear-gradient(135deg,#ef4444,#f87171)",
+    i: 3,
+    initials: "VN",
+    name: "Vikram Nair",
+    role: "AI & ML Integration Lead",
+    shortLine: "Ex-Swiggy ML team. Specialises in embedding LLMs.",
     bio: "Ex-Swiggy ML team. Specialises in embedding LLMs into real products. Has shipped 8 production AI features in the last 18 months — not demos, real products.",
-    tags: ["Python", "LangChain", "OpenAI", "RAG", "FastAPI"]
+    tags: ["Python", "LangChain", "OpenAI", "RAG", "FastAPI"],
+    statText: "Shipped 8 production AI features",
+    gradient: "linear-gradient(135deg,#ef4444,#f87171)"
   },
   {
-    n: "Divya Pillai",
-    r: "QA & Performance Lead",
-    av: "DP",
-    bg: "linear-gradient(135deg,#0ea68c,#60a5fa)",
+    i: 4,
+    initials: "DP",
+    name: "Divya Pillai",
+    role: "QA & Performance Lead",
+    shortLine: "6 years finding bugs. Lighthouse scores >90.",
     bio: "6 years finding bugs before users do. Lighthouse scores above 90 on every build she touches. Every test suite ships with 80%+ coverage.",
-    tags: ["Cypress", "Playwright", "k6", "Jest", "Lighthouse"]
+    tags: ["Cypress", "Playwright", "k6", "Jest", "Lighthouse"],
+    statText: "80%+ unit test coverage",
+    gradient: "linear-gradient(135deg,#0ea68c,#60a5fa)"
   }
 ];
 
@@ -374,7 +384,19 @@ export const About: React.FC = () => {
   const [storyIndex, setStoryIndex] = useState(0);
   const [activeStep, setActiveStep] = useState(0);
   const [flippedCard, setFlippedCard] = useState<number | null>(null);
-  const [activeBio, setActiveBio] = useState<number | null>(null);
+  const [flippedLeadCard, setFlippedLeadCard] = useState<number | null>(null);
+
+  const handleFlipLeadCard = (idx: number, forceState?: boolean) => {
+    const isCurrentlyFlipped = flippedLeadCard === idx;
+    const willOpen = forceState !== undefined ? forceState : !isCurrentlyFlipped;
+    if (willOpen) {
+      setFlippedLeadCard(idx);
+    } else {
+      if (isCurrentlyFlipped) {
+        setFlippedLeadCard(null);
+      }
+    }
+  };
   const [currentTime, setCurrentTime] = useState("--:--:--");
   const [techFilter, setTechFilter] = useState("all");
   const [autoplayEnabled, setAutoplayEnabled] = useState(true);
@@ -735,41 +757,7 @@ export const About: React.FC = () => {
     return () => clearInterval(interval);
   }, [flippedCard]);
 
-  // 7. Team Spotlight & Magnetic Card Effects
-  useEffect(() => {
-    const spotlight = document.getElementById("team-spotlight");
-    const teamSection = document.getElementById("team");
-    if (!spotlight || !teamSection) return;
 
-    const handleTeamMouseMove = (e: MouseEvent) => {
-      spotlight.style.background = `radial-gradient(circle 280px at ${e.clientX}px ${e.clientY}px,rgba(30,79,216,.07),transparent)`;
-    };
-
-    teamSection.addEventListener("mousemove", handleTeamMouseMove, { passive: true });
-
-    // Magnetic card tilts
-    const cards = document.querySelectorAll(".tm");
-
-    cards.forEach((card) => {
-      const element = card as HTMLElement;
-      const onMove = (e: MouseEvent) => {
-        const r = element.getBoundingClientRect();
-        const x = ((e.clientX - r.left - r.width / 2) / r.width) * 10;
-        const y = ((e.clientY - r.top - r.height / 2) / r.height) * 10;
-        element.style.transform = `perspective(800px) rotateX(${-y}deg) rotateY(${x}deg) translateZ(4px)`;
-      };
-      const onLeave = () => {
-        element.style.transform = "";
-      };
-
-      element.addEventListener("mousemove", onMove, { passive: true });
-      element.addEventListener("mouseleave", onLeave, { passive: true });
-    });
-
-    return () => {
-      teamSection.removeEventListener("mousemove", handleTeamMouseMove);
-    };
-  }, []);
 
   // 8. Numbers Clock Timer
   useEffect(() => {
@@ -1159,54 +1147,113 @@ export const About: React.FC = () => {
         </div>
       </section>
 
-      {/* § 4 TEAM SECTION */}
-      <section id="team">
-        <div id="team-spotlight" aria-hidden="true" />
-        <div id="rv-team-head" data-rv className={getRvClass("rv-team-head", "rv", "team-head")}>
-          <div className="eyebrow">The Team</div>
-          <h2 className="st">Senior engineers. <em>No juniors on your project.</em></h2>
-        </div>
-        <div className="team-grid">
-          {TEAM.map((member, idx) => (
-            <div id={`rv-tm-${idx}`} data-rv className={getRvClass(`rv-tm-${idx}`, "rv", "tm")} key={idx} onClick={() => setActiveBio(idx)}>
-              <div className="tm-avatar" style={{ background: member.bg }}>
-                {member.av}
-              </div>
-              <div className="tm-name">{member.n}</div>
-              <div className="tm-role">{member.r}</div>
-              <div className="tm-bio">{member.bio}</div>
-              <div className="tm-tags">
-                {member.tags.map((tag, idy) => (
-                  <span className="tm-tag" key={idy}>{tag}</span>
-                ))}
-              </div>
-            </div>
-          ))}
+      {/* § 2 LEADERSHIP */}
+      <section id="story">
+        <div id="rv-story-head" data-rv className={getRvClass("rv-story-head", "rv", "story-head")}>
+          <div className="eyebrow">Leadership</div>
+          <h2 className="st">Built by people, <em>not by process.</em></h2>
         </div>
 
-        {/* Bio Drawer Popup */}
-        <div className={`bio-backdrop ${activeBio !== null ? "open" : ""}`} onClick={() => setActiveBio(null)} />
-        <div className={`bio-drawer ${activeBio !== null ? "open" : ""}`}>
-          <button className="bd-close" onClick={() => setActiveBio(null)}>✕</button>
-          {activeBio !== null && (
-            <div className="bio-drawer-inner">
-              <div className="bd-head">
-                <div className="bd-avatar" style={{ background: TEAM[activeBio].bg }}>
-                  {TEAM[activeBio].av}
-                </div>
-                <div>
-                  <div className="bd-name">{TEAM[activeBio].n}</div>
-                  <div className="bd-role">{TEAM[activeBio].r}</div>
-                </div>
-              </div>
-              <div className="bd-bio">{TEAM[activeBio].bio}</div>
-              <div className="bd-tags">
-                {TEAM[activeBio].tags.map((tag, idy) => (
-                  <span className="bd-tag" key={idy}>{tag}</span>
-                ))}
-              </div>
+        <div className="lead-wrap">
+          {/* CEO SPOTLIGHT CARD */}
+          <div id="rv-ceo-card" data-rv className={getRvClass("rv-ceo-card", "rv", "ceo-card")}>
+            <div className="ceo-quote-mark">"</div>
+            <div className="ceo-photo-wrap">
+              <div className="ceo-photo-ring" />
+              <div className="ceo-photo" style={{ background: "linear-gradient(135deg,#1e4fd8,#3b7bf5)" }}>RS</div>
             </div>
-          )}
+            <div className="ceo-body">
+              <div className="ceo-eyebrow">
+                <div className="ceo-eyebrow-bar" />
+                Founder & CEO
+              </div>
+              <p className="ceo-quote">"We never set out to be the biggest studio — just the one clients trust with the project that actually matters to them."</p>
+              <div className="ceo-name-row">
+                <span className="ceo-name">Rahul Sharma</span>
+                <span className="ceo-title-pill">Founder & CEO</span>
+              </div>
+              <div className="ceo-sub">7 years building enterprise platforms · Led architecture for three unicorn-stage startups</div>
+            </div>
+          </div>
+
+          {/* TWO LEADERSHIP FLIP CARDS */}
+          <div className="lead-row">
+            {LEADERSHIP.map((lead, idx) => {
+              const isFlipped = flippedLeadCard === lead.i;
+              return (
+                <div
+                  key={idx}
+                  id={`rv-lc-${lead.i}`}
+                  data-rv
+                  className={getRvClass(`rv-lc-${lead.i}`, "rv", `lc ${isFlipped ? "flipped" : ""}`)}
+                  onClick={() => handleFlipLeadCard(lead.i)}
+                  tabIndex={0}
+                  role="button"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      handleFlipLeadCard(lead.i);
+                    }
+                    if (e.key === 'Escape') {
+                      handleFlipLeadCard(lead.i, false);
+                    }
+                  }}
+                >
+                  <div className="lc-inner">
+                    {/* Front Face */}
+                    <div className="lc-face lc-front">
+                      <div className="lc-front-avatar" style={{ background: lead.gradient }}>
+                        {lead.initials}
+                      </div>
+                      <div className="lc-front-body">
+                        <div className="lc-front-name">{lead.name}</div>
+                        <div className="lc-front-role">{lead.role}</div>
+                        <div className="lc-front-line">{lead.shortLine}</div>
+                      </div>
+                      <div className="lc-flip-hint">
+                        <svg viewBox="0 0 14 14" fill="none">
+                          <path d="M11 5.5A4.5 4.5 0 1 1 6.5 1M11 1v3.5H7.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      </div>
+                    </div>
+
+                    {/* Back Face */}
+                    <div className="lc-face lc-back">
+                      <button
+                        className="lc-back-close"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleFlipLeadCard(lead.i, false);
+                        }}
+                        aria-label="Close"
+                      >
+                        ✕
+                      </button>
+                      <div className="lcb-top">
+                        <div className="lcb-avatar" style={{ background: lead.gradient }}>
+                          {lead.initials}
+                        </div>
+                        <div>
+                          <div className="lcb-name">{lead.name}</div>
+                          <div className="lcb-role">{lead.role}</div>
+                        </div>
+                      </div>
+                      <div className="lcb-bio">{lead.bio}</div>
+                      <div className="lcb-tags">
+                        {lead.tags.map((tag, idy) => (
+                          <span className="lcb-tag" key={idy}>{tag}</span>
+                        ))}
+                      </div>
+                      <div className="lcb-stat">
+                        <span className="lcb-stat-dot" />
+                        {lead.statText}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </section>
 

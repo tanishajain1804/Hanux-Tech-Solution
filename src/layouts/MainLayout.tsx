@@ -127,14 +127,38 @@ const CursorFollower: React.FC = () => {
     return () => cancelAnimationFrame(animationFrameId);
   }, [cursorType]);
 
+  const [currentPath, setCurrentPath] = useState(window.location.pathname);
+
+  useEffect(() => {
+    const handlePathChange = () => {
+      setCurrentPath(window.location.pathname);
+    };
+    window.addEventListener("pathchange", handlePathChange);
+    window.addEventListener("popstate", handlePathChange);
+    return () => {
+      window.removeEventListener("pathchange", handlePathChange);
+      window.removeEventListener("popstate", handlePathChange);
+    };
+  }, []);
+
   if (!isVisible || cursorType === "hidden") return null;
+
+  const isDarkPage = currentPath.startsWith("/services/");
 
   // Custom styling states for cursor size and color
   const stylesMap = {
-    default: "w-6 h-6 border border-[#1F4096]/30 bg-transparent",
-    hover: "w-8 h-8 border border-[#1F4096] bg-[#1F4096]/5 scale-110",
-    text: "w-14 h-14 bg-[#1F4096] text-white text-[10px] font-extrabold uppercase tracking-widest scale-100",
-    click: "w-5 h-5 bg-[#1F4096]/10 border border-[#1F4096]/50 scale-90"
+    default: isDarkPage
+      ? "w-6 h-6 border border-white/40 bg-transparent"
+      : "w-6 h-6 border border-[#1F4096]/30 bg-transparent",
+    hover: isDarkPage
+      ? "w-8 h-8 border border-white bg-white/10 scale-110"
+      : "w-8 h-8 border border-[#1F4096] bg-[#1F4096]/5 scale-110",
+    text: isDarkPage
+      ? "w-14 h-14 bg-white text-[#0D1E3D] text-[10px] font-extrabold uppercase tracking-widest scale-100"
+      : "w-14 h-14 bg-[#1F4096] text-white text-[10px] font-extrabold uppercase tracking-widest scale-100",
+    click: isDarkPage
+      ? "w-5 h-5 bg-white/20 border border-white/60 scale-90"
+      : "w-5 h-5 bg-[#1F4096]/10 border border-[#1F4096]/50 scale-90"
   };
 
   return (
@@ -142,7 +166,9 @@ const CursorFollower: React.FC = () => {
       {/* Instant Central Dot */}
       <div
         ref={dotRef}
-        className="hidden md:block fixed top-0 left-0 w-1.5 h-1.5 bg-[#1F4096] rounded-full pointer-events-none z-[9999] select-none -translate-x-1/2 -translate-y-1/2 transition-opacity duration-200"
+        className={`hidden md:block fixed top-0 left-0 w-2 h-2 rounded-full pointer-events-none z-[9999] select-none -translate-x-1/2 -translate-y-1/2 transition-opacity duration-200 ${
+          isDarkPage ? "bg-white" : "bg-[#1F4096]"
+        }`}
         style={{
           opacity: cursorType === "text" ? 0 : 1,
           willChange: "transform"

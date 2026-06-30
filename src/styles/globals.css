@@ -14,8 +14,8 @@ body {
 
 /* Custom interactive selections */
 ::selection {
-  background-color: var(--accent-light);
-  color: var(--text-primary);
+  background-color: var(--accent2);
+  color: #ffffff;
 }
 
 /* Hide system cursor on desktop to allow custom Cuberto cursor to shine */
